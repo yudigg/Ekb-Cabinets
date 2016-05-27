@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+ 
+
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+        <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

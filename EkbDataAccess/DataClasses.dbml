@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EKCabinetsDb" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=EKCabinetsDb;Integrated Security=True" SettingsObjectName="EkbDataAccess.Properties.Settings" SettingsPropertyName="EKCabinetsDbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Cabinet" Member="Cabinets">
+    <Type Name="Cabinet">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BrandId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LineId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DoorImage" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="FullImage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Cabinet_Portfolio" Member="Portfolios" ThisKey="Id" OtherKey="CabinetId" Type="Portfolio" />
+      <Association Name="Line_Cabinet" Member="Line" ThisKey="LineId" OtherKey="Id" Type="Line" IsForeignKey="true" />
+      <Association Name="Brand_Cabinet" Member="Brand" ThisKey="BrandId" OtherKey="Id" Type="Brand" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Line" Member="Lines">
+    <Type Name="Line">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FullImage" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="BrandId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Line_Cabinet" Member="Cabinets" ThisKey="Id" OtherKey="LineId" Type="Cabinet" />
+      <Association Name="Brand_Line" Member="Brand" ThisKey="BrandId" OtherKey="Id" Type="Brand" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Portfolio" Member="Portfolios">
+    <Type Name="Portfolio">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CabinetId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Image" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Cabinet_Portfolio" Member="Cabinet" ThisKey="CabinetId" OtherKey="Id" Type="Cabinet" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Brand" Member="Brands">
+    <Type Name="Brand">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="LogoFile" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Brand_Cabinet" Member="Cabinets" ThisKey="Id" OtherKey="BrandId" Type="Cabinet" />
+      <Association Name="Brand_Line" Member="Lines" ThisKey="Id" OtherKey="BrandId" Type="Line" />
+    </Type>
+  </Table>
+</Database>

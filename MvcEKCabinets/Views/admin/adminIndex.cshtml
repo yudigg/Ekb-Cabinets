@@ -1,0 +1,9 @@
+﻿@using EkbDataAccess
+@model IEnumerable<Cabinet>
+
+@foreach(Cabinet c in Model)
+{
+    <h5>@c.Brand.Name</h5>
+    <h3>@c.Line.Name</h3>
+    <h1>@c.Name</h1>
+}
