@@ -14,18 +14,34 @@ namespace EkbDataAccess
         {
             _connectionString = connection;
         }
-        public IEnumerable<Cabinet> GetFullRepository()
+        public IEnumerable<Line> GetFullRepository()
         {
             using (var dc = new DataClassesDataContext(_connectionString))
             {
                 var loadOptions = new DataLoadOptions();
-                loadOptions.LoadWith<Cabinet>(c => c.Brand);
-                loadOptions.LoadWith<Cabinet>(c => c.Line);
+                loadOptions.LoadWith<Line>(l => l.Brand);
+                loadOptions.LoadWith<Line>(l => l.Cabinets);
                 dc.LoadOptions = loadOptions;
+                return dc.Lines.ToList();
+            }
+        }
+        public IEnumerable<Cabinet> GetCabinetInfoByLineId(int lineId)
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {
+                //var loadOptions = new DataLoadOptions();
+                //loadOptions.LoadWith<Cabinet>(c => c.Line);
+                //dc.LoadOptions = loadOptions;
+                return dc.Cabinets.Where(c => c.LineId == lineId).ToList();
+            }
+        }
+        public IEnumerable<Cabinet> GetAllCabinets()
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {
                 return dc.Cabinets.ToList();
             }
         }
-
         public void NewCabinet(Cabinet cabinet)
         {
             using (var dc = new DataClassesDataContext(_connectionString))
@@ -78,15 +94,23 @@ namespace EkbDataAccess
         {
             using (var dc = new DataClassesDataContext(_connectionString))
             {
+                var loadOptions = new DataLoadOptions();
+                loadOptions.LoadWith<Line>(l => l.Cabinets);
+                dc.LoadOptions = loadOptions;
                 return dc.Lines.Where(l => l.BrandId == brandId).ToList();
             }
         }
         public IEnumerable<Cabinet> GetCabinetInfoByBrand(int brandId)
         {
             using (var dc = new DataClassesDataContext(_connectionString))
-            {
-                return dc.Cabinets.Where(c => c.BrandId == brandId).ToList();
-            }
+            {                               
+                  var result = (from c in dc.Cabinets
+                                  join l in dc.Lines on c.LineId equals l.Id
+                                  join b in dc.Brands on l.BrandId equals b.Id
+                                  where b.Id == brandId 
+                                  select c).ToList();
+                  return result; 
+                }
         }
         public IEnumerable<Portfolio>GetAllPortfolioInfo()
         {

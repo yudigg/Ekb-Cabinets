@@ -30,6 +30,9 @@ namespace EkbDataAccess
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertBrand(Brand instance);
+    partial void UpdateBrand(Brand instance);
+    partial void DeleteBrand(Brand instance);
     partial void InsertCabinet(Cabinet instance);
     partial void UpdateCabinet(Cabinet instance);
     partial void DeleteCabinet(Cabinet instance);
@@ -39,9 +42,6 @@ namespace EkbDataAccess
     partial void InsertPortfolio(Portfolio instance);
     partial void UpdatePortfolio(Portfolio instance);
     partial void DeletePortfolio(Portfolio instance);
-    partial void InsertBrand(Brand instance);
-    partial void UpdateBrand(Brand instance);
-    partial void DeleteBrand(Brand instance);
     #endregion
 		
 		public DataClassesDataContext() : 
@@ -74,6 +74,14 @@ namespace EkbDataAccess
 			OnCreated();
 		}
 		
+		public System.Data.Linq.Table<Brand> Brands
+		{
+			get
+			{
+				return this.GetTable<Brand>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Cabinet> Cabinets
 		{
 			get
@@ -97,41 +105,21 @@ namespace EkbDataAccess
 				return this.GetTable<Portfolio>();
 			}
 		}
-		
-		public System.Data.Linq.Table<Brand> Brands
-		{
-			get
-			{
-				return this.GetTable<Brand>();
-			}
-		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Cabinet")]
-	public partial class Cabinet : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Brand")]
+	public partial class Brand : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private int _BrandId;
-		
-		private System.Nullable<int> _LineId;
-		
 		private string _Name;
 		
-		private string _Description;
+		private string _LogoFile;
 		
-		private string _DoorImage;
-		
-		private string _FullImage;
-		
-		private EntitySet<Portfolio> _Portfolios;
-		
-		private EntityRef<Line> _Line;
-		
-		private EntityRef<Brand> _Brand;
+		private EntitySet<Line> _Lines;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -139,25 +127,15 @@ namespace EkbDataAccess
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnBrandIdChanging(int value);
-    partial void OnBrandIdChanged();
-    partial void OnLineIdChanging(System.Nullable<int> value);
-    partial void OnLineIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnDoorImageChanging(string value);
-    partial void OnDoorImageChanged();
-    partial void OnFullImageChanging(string value);
-    partial void OnFullImageChanged();
+    partial void OnLogoFileChanging(string value);
+    partial void OnLogoFileChanged();
     #endregion
 		
-		public Cabinet()
+		public Brand()
 		{
-			this._Portfolios = new EntitySet<Portfolio>(new Action<Portfolio>(this.attach_Portfolios), new Action<Portfolio>(this.detach_Portfolios));
-			this._Line = default(EntityRef<Line>);
-			this._Brand = default(EntityRef<Brand>);
+			this._Lines = new EntitySet<Line>(new Action<Line>(this.attach_Lines), new Action<Line>(this.detach_Lines));
 			OnCreated();
 		}
 		
@@ -181,32 +159,157 @@ namespace EkbDataAccess
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BrandId", DbType="Int NOT NULL")]
-		public int BrandId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(1000) NOT NULL", CanBeNull=false)]
+		public string Name
 		{
 			get
 			{
-				return this._BrandId;
+				return this._Name;
 			}
 			set
 			{
-				if ((this._BrandId != value))
+				if ((this._Name != value))
 				{
-					if (this._Brand.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnBrandIdChanging(value);
+					this.OnNameChanging(value);
 					this.SendPropertyChanging();
-					this._BrandId = value;
-					this.SendPropertyChanged("BrandId");
-					this.OnBrandIdChanged();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineId", DbType="Int")]
-		public System.Nullable<int> LineId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogoFile", DbType="VarChar(MAX)")]
+		public string LogoFile
+		{
+			get
+			{
+				return this._LogoFile;
+			}
+			set
+			{
+				if ((this._LogoFile != value))
+				{
+					this.OnLogoFileChanging(value);
+					this.SendPropertyChanging();
+					this._LogoFile = value;
+					this.SendPropertyChanged("LogoFile");
+					this.OnLogoFileChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Brand_Line", Storage="_Lines", ThisKey="Id", OtherKey="BrandId")]
+		public EntitySet<Line> Lines
+		{
+			get
+			{
+				return this._Lines;
+			}
+			set
+			{
+				this._Lines.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Lines(Line entity)
+		{
+			this.SendPropertyChanging();
+			entity.Brand = this;
+		}
+		
+		private void detach_Lines(Line entity)
+		{
+			this.SendPropertyChanging();
+			entity.Brand = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Cabinet")]
+	public partial class Cabinet : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _LineId;
+		
+		private string _Name;
+		
+		private string _DoorImage;
+		
+		private string _FullImage;
+		
+		private EntitySet<Portfolio> _Portfolios;
+		
+		private EntityRef<Line> _Line;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnLineIdChanging(int value);
+    partial void OnLineIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDoorImageChanging(string value);
+    partial void OnDoorImageChanged();
+    partial void OnFullImageChanging(string value);
+    partial void OnFullImageChanged();
+    #endregion
+		
+		public Cabinet()
+		{
+			this._Portfolios = new EntitySet<Portfolio>(new Action<Portfolio>(this.attach_Portfolios), new Action<Portfolio>(this.detach_Portfolios));
+			this._Line = default(EntityRef<Line>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineId", DbType="Int NOT NULL")]
+		public int LineId
 		{
 			get
 			{
@@ -245,26 +348,6 @@ namespace EkbDataAccess
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
 				}
 			}
 		}
@@ -349,43 +432,9 @@ namespace EkbDataAccess
 					}
 					else
 					{
-						this._LineId = default(Nullable<int>);
+						this._LineId = default(int);
 					}
 					this.SendPropertyChanged("Line");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Brand_Cabinet", Storage="_Brand", ThisKey="BrandId", OtherKey="Id", IsForeignKey=true)]
-		public Brand Brand
-		{
-			get
-			{
-				return this._Brand.Entity;
-			}
-			set
-			{
-				Brand previousValue = this._Brand.Entity;
-				if (((previousValue != value) 
-							|| (this._Brand.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Brand.Entity = null;
-						previousValue.Cabinets.Remove(this);
-					}
-					this._Brand.Entity = value;
-					if ((value != null))
-					{
-						value.Cabinets.Add(this);
-						this._BrandId = value.Id;
-					}
-					else
-					{
-						this._BrandId = default(int);
-					}
-					this.SendPropertyChanged("Brand");
 				}
 			}
 		}
@@ -437,6 +486,8 @@ namespace EkbDataAccess
 		
 		private int _BrandId;
 		
+		private string _Description;
+		
 		private EntitySet<Cabinet> _Cabinets;
 		
 		private EntityRef<Brand> _Brand;
@@ -453,6 +504,8 @@ namespace EkbDataAccess
     partial void OnFullImageChanged();
     partial void OnBrandIdChanging(int value);
     partial void OnBrandIdChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
     #endregion
 		
 		public Line()
@@ -542,6 +595,26 @@ namespace EkbDataAccess
 					this._BrandId = value;
 					this.SendPropertyChanged("BrandId");
 					this.OnBrandIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(2000)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
 				}
 			}
 		}
@@ -774,172 +847,6 @@ namespace EkbDataAccess
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Brand")]
-	public partial class Brand : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private string _LogoFile;
-		
-		private EntitySet<Cabinet> _Cabinets;
-		
-		private EntitySet<Line> _Lines;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnLogoFileChanging(string value);
-    partial void OnLogoFileChanged();
-    #endregion
-		
-		public Brand()
-		{
-			this._Cabinets = new EntitySet<Cabinet>(new Action<Cabinet>(this.attach_Cabinets), new Action<Cabinet>(this.detach_Cabinets));
-			this._Lines = new EntitySet<Line>(new Action<Line>(this.attach_Lines), new Action<Line>(this.detach_Lines));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(1000) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogoFile", DbType="VarChar(MAX)")]
-		public string LogoFile
-		{
-			get
-			{
-				return this._LogoFile;
-			}
-			set
-			{
-				if ((this._LogoFile != value))
-				{
-					this.OnLogoFileChanging(value);
-					this.SendPropertyChanging();
-					this._LogoFile = value;
-					this.SendPropertyChanged("LogoFile");
-					this.OnLogoFileChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Brand_Cabinet", Storage="_Cabinets", ThisKey="Id", OtherKey="BrandId")]
-		public EntitySet<Cabinet> Cabinets
-		{
-			get
-			{
-				return this._Cabinets;
-			}
-			set
-			{
-				this._Cabinets.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Brand_Line", Storage="_Lines", ThisKey="Id", OtherKey="BrandId")]
-		public EntitySet<Line> Lines
-		{
-			get
-			{
-				return this._Lines;
-			}
-			set
-			{
-				this._Lines.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Cabinets(Cabinet entity)
-		{
-			this.SendPropertyChanging();
-			entity.Brand = this;
-		}
-		
-		private void detach_Cabinets(Cabinet entity)
-		{
-			this.SendPropertyChanging();
-			entity.Brand = null;
-		}
-		
-		private void attach_Lines(Line entity)
-		{
-			this.SendPropertyChanging();
-			entity.Brand = this;
-		}
-		
-		private void detach_Lines(Line entity)
-		{
-			this.SendPropertyChanging();
-			entity.Brand = null;
 		}
 	}
 }

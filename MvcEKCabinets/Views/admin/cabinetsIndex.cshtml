@@ -1,0 +1,150 @@
+﻿@using EkbDataAccess
+@model MvcEKCabinets.Models.AdminPageModel
+
+<h2>cabinetsIndex</h2>
+
+
+<table class="table table-bordered table-striped table-hover" id="dataTable">
+    <caption id="brandCaption">@Model.BrandName</caption>
+    <tr>
+        <th>Series</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (Line l in Model.Lines)
+    {
+        <tr>
+            <td>@l.Name</td>
+            <td>@l.Description</td>        
+            <td>
+                <button class="add-btn btn btn-primary" data-id="@l.Id" data-linename="@l.Name">
+                    Add Cabinet
+                </button>
+                <br />
+                <br />
+                <button class="view-btn btn btn-success" data-id="@l.Id" data-linename="@l.Name">
+                    View Cabinets
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+@*<table class="table table-bordered table-striped table-hover" id="dataTable">
+    <caption id="caption"></caption>
+    <tr>
+        <th>Series</th>
+        <th>Description</th>       
+        <th>Actions</th>
+    </tr>
+    @foreach (Line l in Model.Lines)
+    {
+        <tr>
+            <td>@l.Name</td>
+            <td>@l.Description</td>
+            @foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
+            {
+                <td>@c.Name</td>
+                <td>
+                    <img src="~/Uploads/@c.DoorImage" style="height:100px" />
+                </td>
+                <td>
+                    <img src="~/Uploads/@c.FullImage" style="height:100px" />
+                </td>
+            }
+            <td>
+                <button class="add-style btn btn-info" data-id="@l.Id" data-linename="@l.Name">
+                    Add
+                </button>
+                <br />
+                <br />               
+                <button class="edit btn btn-info">
+                    Edit
+                </button>
+            </td>
+        </tr>
+    }
+</table>*@
+<!--View Cabinets Modal -->
+<div class="modal fade" id="viewCabinetsModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">View Cabinets<span id="series-name"></span></h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped table-hover" id="viewTable">
+                    <caption id="seriesCaption"></caption>
+                    <tr>
+                        <th>Cabinet-Name</th>
+                        <th>Door-Image</th>
+                        <th>Full-Image</th>
+                        <th>Actions</th>
+                    </tr>                  
+                        @*<tr>
+                            <td>@c.Name</td>
+                            <td>
+                                <img src="~/Uploads/@c.DoorImage" style="height:100px" />
+                            </td>
+                            <td>
+                                <img src="~/Uploads/@c.FullImage" style="height:100px" />
+                            </td>
+                        </tr>*@                    
+                </table>
+
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>  close with js
+                </div>*@
+        </div>
+
+    </div>
+</div>
+
+<!--Cabinet Add Style Modal -->
+<div class="modal fade" id="addStyleModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Style</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/AddNewCabinet" enctype="multipart/form-data" class="form-group" id="styleForm">
+                    <div class="form-group">
+                        <label for="style">Style Name:</label>
+                        <input type="text" class="form-control" name="styleName" placeholder="Enter Style Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="doorImg">Upload Door Image:</label>
+                        <input type="file" name="doorImg">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullImg">Upload Full Image:</label>
+                        <input type="file" name="fullImg">
+                    </div>
+                    <button type="submit" id="submitStyle" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>  close with js
+                </div>*@
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+<script src="~/Scripts/siteScripts/admin.cabinetsIndex.js"></script>
+<script src="~/Scripts/siteScripts/ejs_production.js"></script>
+}

@@ -23,14 +23,14 @@
                 <h1>@l.Name</h1>
                 <p style="word-wrap:break-word">Description...................................................................................</p>
             </div>
-                <div class="col-md-7" style="margin-top: 20px;">
-                    @foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
-                    {
+            <div class="col-md-7" style="margin-top: 20px;">
+                @foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
+                {
 
-                        <img src="@c.DoorImage" id="smallImage" data-id="@c.Id" style="height:200px; margin-left:20px; cursor: pointer;" />
-                    }
-                </div>
-            
+                    <img src="@c.DoorImage" id="smallImage" data-id="@c.Id" style="height:200px; margin-left:20px; cursor: pointer;" />
+                }
+            </div>
+
         </div>
     }
-            </div>
+</div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using EkbDataAccess;
+using MvcEKCabinets.Models;
 
 namespace MvcEKCabinets.Controllers
 {
@@ -13,28 +14,46 @@ namespace MvcEKCabinets.Controllers
         public ActionResult AdminIndex()
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            IEnumerable<Cabinet> all = repo.GetFullRepository();
-            return View(all);
+            IEnumerable<Line> all = repo.GetFullRepository();
+            IEnumerable<Cabinet> cabinets = repo.GetAllCabinets();
+            IEnumerable<Brand> brands = repo.GetAllBrandInfo();
+            AdminPageModel adm = new AdminPageModel { Lines = all, Cabinets = cabinets, Brands =brands };
+            return View(adm);
         }
-        [HttpPost]
-        public ActionResult AddNewCabinet(string name, int lineId, int brandId, string descripton, HttpPostedFileBase doorImg, HttpPostedFileBase fullImg)
+        public ActionResult CabinetsIndex(int brandId,string brandName)
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            Guid gDoor = new Guid();
-            Guid gFull = new Guid();
+            AdminPageModel adm = new AdminPageModel {  Lines = repo.GetLineInfoByBrand(brandId), Cabinets = repo.GetCabinetInfoByBrand(brandId)};
+            adm.BrandName = brandName;
+            return View(adm);
+        }
+      
+        public ActionResult ViewCabinets(int seriesId)
+        {
+            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+           IEnumerable<Cabinet> cabinets = repo.GetCabinetInfoByLineId(seriesId);
+          // int numbers = 123;
+          // string x = cabinets.First().Name;
+           return Json(cabinets, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult AddNewCabinet(string styleName, int lineId,string description, HttpPostedFileBase doorImg, HttpPostedFileBase fullImg)
+        {
+            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+            Guid gDoor = Guid.NewGuid();
+            Guid gFull = Guid.NewGuid();
             string fileNameDoorImg = gDoor + ".jpg";
             string fileNameFullImg = gFull + ".jpg";
             doorImg.SaveAs(Server.MapPath("~/Uploads/" + fileNameDoorImg));
             fullImg.SaveAs(Server.MapPath("~/Uploads/" + fileNameFullImg));
-            Cabinet c = new Cabinet { Name = name, LineId = lineId, BrandId = brandId, Description = descripton };
+            Cabinet c = new Cabinet { Name = styleName, LineId = lineId };
             c.DoorImage = fileNameDoorImg;
             c.FullImage = fileNameFullImg;
             repo.NewCabinet(c);
-
             return RedirectToAction("AdminIndex");
         }
         [HttpPost]
-        public ActionResult AddNewLine(string name, int brandId)
+        public ActionResult AddNewSeries(string name, int brandId)
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
             Line l = new Line { Name = name, BrandId = brandId };
@@ -43,17 +62,24 @@ namespace MvcEKCabinets.Controllers
             return RedirectToAction("AdminIndex");
         }
         [HttpPost]
-        public ActionResult AddNewBrand(string name, HttpPostedFileBase logoFile)
+        public ActionResult AddNewBrand(string name, HttpPostedFileBase logoImg)
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            Guid g = new Guid();
+            Guid g = Guid.NewGuid();
             string fileName = g + ".jpg";
-            logoFile.SaveAs(Server.MapPath("~/Uploads/" + fileName));
+            logoImg.SaveAs(Server.MapPath("~/Uploads/" + fileName));
             Brand b = new Brand { Name = name, LogoFile = fileName };
             repo.NewBrand(b);
             return RedirectToAction("AdminIndex");
         }
-        public ActionResult EditCabinet(Cabinet c, string guidDoorImg, string FullImg)
+        public ActionResult EditCabinets(int seriesId)
+        {
+            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+          IEnumerable<Cabinet> c =  repo.GetCabinetInfoByLineId(seriesId);
+            return View(c);
+        }
+        [HttpPost]
+        public ActionResult EditCabinets(Cabinet c, string guidDoorImg, string FullImg)
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
             c.DoorImage = guidDoorImg;

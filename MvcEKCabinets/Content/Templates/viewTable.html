@@ -1,0 +1,19 @@
+﻿<tr>
+    <td><%= Name %></td>
+    <td>
+        <img src="~/Uploads/<%= DoorImage%>" style="height:100px" />
+    </td>
+    <td>
+        <img src="~/Uploads/<%= FullImage%>" style="height:100px" />
+    </td>
+    <td>
+        <button class="edit-style btn btn-warning" data-id="<%= Id%>" data-linename="<%= Name%>">
+            Edit
+        </button>
+        <br />
+        <br />
+        <button class="delete btn btn-danger">
+            Delete
+        </button>
+    </td>
+</tr>    

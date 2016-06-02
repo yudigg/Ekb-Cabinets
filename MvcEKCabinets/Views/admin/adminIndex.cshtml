@@ -1,9 +1,101 @@
 ﻿@using EkbDataAccess
-@model IEnumerable<Cabinet>
+@model MvcEKCabinets.Models.AdminPageModel
 
-@foreach(Cabinet c in Model)
-{
-    <h5>@c.Brand.Name</h5>
-    <h3>@c.Line.Name</h3>
-    <h1>@c.Name</h1>
+<div class="row">
+
+    @foreach (Brand b in Model.Brands)
+    {
+        <div class="col-md-2" style="height:auto">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="/cabinets/Lines?brandId=@b.Id">
+                        <img src="/uploads/@b.LogoFile" style="height: 125px;width:125px" />
+                    </a>
+                    <br />
+                    <a href="/admin/cabinetsIndex?brandId=@b.Id&brandName=@b.Name" class="btn add-edit-inventory" data-id="@b.Name">Add/Edit Inventory</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <button class="btn btn-block btn-default add-btn" id="new-brand">Add Brand</button>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-block btn-default add-btn" id="new-series">Add Series</button>
+    </div>
+</div>
+
+<!--Series Modal -->
+<div class="modal fade" id="newSeriesModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Series</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/AddNewSeries" class="form-group" id="seriesForm">
+                    <div class="form-group">
+                        <label for="name">Series Name:</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Series Name">
+                    </div>
+                    <div class="form-group">
+                        <select name="brandId">
+                            <option value="" disabled="disabled" selected="selected">Select Manufacturer</option>
+                            @foreach (Brand b in Model.Brands)
+                            {
+                                <option value="@b.Id">@b.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+                    </div>
+
+                    <button type="submit" id="submitSeries" class="btn btn-default">Submit</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>  close with js
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Brand Modal -->
+<div class="modal fade" id="newBrandModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Manufacturer</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/AddNewBrand" enctype="multipart/form-data" class="form-group" id="brandForm">
+                    <div class="form-group">
+                        <label for="name">Manufacturer Name:</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter Manufacturer Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="logoImg">Upload Logo Image:</label>
+                        <input type="file" name="logoImg">
+                    </div>
+                    <button type="submit" id="submitManufacturer" class="btn btn-default">Submit</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>  close with js
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/siteScripts/admin.js"></script>
 }
