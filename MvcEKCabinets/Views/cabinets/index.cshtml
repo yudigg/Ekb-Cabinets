@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Welcome to Modern Business
+            Welcome to EKB Cabinets
         </h1>
     </div>
     @foreach (Brand b in Model.Brands)
@@ -13,7 +13,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <a href="/cabinets/Lines?brandId=@b.Id">
-                            <img src="@b.Name" style="height: 125px" />
+                            <img src="/Uploads/@b.LogoFile" style="height: 125px" />
                         </a>
                         <a href="#" class="btn btn-default">Learn More</a>
                         <a href="#" class="btn btn-default">Learn More</a>

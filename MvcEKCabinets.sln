@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcEKCabinets", "MvcEKCabin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EkbDataAccess", "EkbDataAccess\EkbDataAccess.csproj", "{8D9FE0B9-F6D5-44B1-9282-537427AFF7FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToAddAdmins", "ConsoleToAddAdmins\ConsoleToAddAdmins.csproj", "{2E025AFE-9975-423C-BB5E-B37CE1CE7E73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8D9FE0B9-F6D5-44B1-9282-537427AFF7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D9FE0B9-F6D5-44B1-9282-537427AFF7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D9FE0B9-F6D5-44B1-9282-537427AFF7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E025AFE-9975-423C-BB5E-B37CE1CE7E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E025AFE-9975-423C-BB5E-B37CE1CE7E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E025AFE-9975-423C-BB5E-B37CE1CE7E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E025AFE-9975-423C-BB5E-B37CE1CE7E73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

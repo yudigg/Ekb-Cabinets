@@ -40,12 +40,18 @@
         <classShapeMoniker Id="8ffb1891-d5ca-45c2-8633-d7865785a895" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.25 : 1.81814697265625); (9 : 1.81814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.25 : 1.81814697265625); (9 : 1.81814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataClassesDataContext/Cabinet/Cabinet_Portfolio" />
       <nodes>
         <classShapeMoniker Id="8b1cc0c8-64c9-471d-b492-7c37a1a3c85b" />
         <classShapeMoniker Id="41461c49-f0e8-42b9-a6ae-39b775d9a76b" />
       </nodes>
     </associationConnector>
+    <classShape Id="50330b67-372b-4d64-8f69-a328140a9882" absoluteBounds="1.375, 2.875, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DataClassesDataContext/Admin" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b894338c-72f6-4a88-9023-48751cfb8d49" absoluteBounds="1.3900000000000001, 3.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

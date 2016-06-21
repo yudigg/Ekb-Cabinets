@@ -4,7 +4,7 @@
 <h2>cabinetsIndex</h2>
 
 
-<table class="table table-bordered table-striped table-hover" id="dataTable">
+<table class="table table-bordered table-striped table-hover" id="seriesTable">
     <caption id="brandCaption">@Model.BrandName</caption>
     <tr>
         <th>Series</th>
@@ -29,44 +29,6 @@
         </tr>
     }
 </table>
-
-
-
-@*<table class="table table-bordered table-striped table-hover" id="dataTable">
-    <caption id="caption"></caption>
-    <tr>
-        <th>Series</th>
-        <th>Description</th>       
-        <th>Actions</th>
-    </tr>
-    @foreach (Line l in Model.Lines)
-    {
-        <tr>
-            <td>@l.Name</td>
-            <td>@l.Description</td>
-            @foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
-            {
-                <td>@c.Name</td>
-                <td>
-                    <img src="~/Uploads/@c.DoorImage" style="height:100px" />
-                </td>
-                <td>
-                    <img src="~/Uploads/@c.FullImage" style="height:100px" />
-                </td>
-            }
-            <td>
-                <button class="add-style btn btn-info" data-id="@l.Id" data-linename="@l.Name">
-                    Add
-                </button>
-                <br />
-                <br />               
-                <button class="edit btn btn-info">
-                    Edit
-                </button>
-            </td>
-        </tr>
-    }
-</table>*@
 <!--View Cabinets Modal -->
 <div class="modal fade" id="viewCabinetsModal" role="dialog">
     <div class="modal-dialog">
@@ -78,21 +40,15 @@
             <div class="modal-body">
                 <table class="table table-bordered table-striped table-hover" id="viewTable">
                     <caption id="seriesCaption"></caption>
-                    <tr>
-                        <th>Cabinet-Name</th>
-                        <th>Door-Image</th>
-                        <th>Full-Image</th>
-                        <th>Actions</th>
-                    </tr>                  
-                        @*<tr>
-                            <td>@c.Name</td>
-                            <td>
-                                <img src="~/Uploads/@c.DoorImage" style="height:100px" />
-                            </td>
-                            <td>
-                                <img src="~/Uploads/@c.FullImage" style="height:100px" />
-                            </td>
-                        </tr>*@                    
+                    <thead>
+                        <tr>
+                            <th>Cabinet-Name</th>
+                            <th>Door-Image</th>
+                            <th>Full-Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>                
+                                    
                 </table>
 
             </div>
@@ -114,24 +70,55 @@
                 <h4 class="modal-title">New Style</h4>
             </div>
             <div class="modal-body">
-                <form method="POST" action="/admin/AddNewCabinet" enctype="multipart/form-data" class="form-group" id="styleForm">
+                <form method="POST" action="/admin/AddNewCabinet" enctype="multipart/form-data" class="form-group" id="addStyleForm">
                     <div class="form-group">
                         <label for="style">Style Name:</label>
                         <input type="text" class="form-control" name="styleName" placeholder="Enter Style Name">
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea class="form-control" name="description" placeholder="Description"></textarea>
-                    </div>
+                  
                     <div class="form-group">
                         <label for="doorImg">Upload Door Image:</label>
-                        <input type="file" name="doorImg">
+                        <input type="file" accept="image/*" name="doorImg">
                     </div>
                     <div class="form-group">
                         <label for="fullImg">Upload Full Image:</label>
-                        <input type="file" name="fullImg">
+                        <input type="file" accept="image/*" name="fullImg">
                     </div>
                     <button type="submit" id="submitStyle" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>  close with js
+                </div>*@
+        </div>
+
+    </div>
+</div>
+<!--EDIT Modal -->
+<div class="modal fade" id="editModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Style</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/EditCabinets" enctype="multipart/form-data" class="form-group" id="editForm">
+                    <div class="form-group">
+                        <label for="edit-name">Cabinet Name:</label>
+                        <input type="text" class="form-control" name="Name" id="edit-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="doorImg">Upload Door Image:</label>
+                        <input type="file" accept="image/*" name="doorImg">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullImg">Upload Full Image:</label>
+                        <input type="file" accept="image/*" name="fullImg">
+                    </div>
+                    <button type="submit" id="submitUpdate" class="btn btn-default">Submit</button>
                 </form>
             </div>
             @*<div class="modal-footer">
@@ -145,6 +132,7 @@
 
 
 @section scripts{
+<script src="~/Scripts/siteScripts/ejs_0.9_alpha_1_production.js"></script>
 <script src="~/Scripts/siteScripts/admin.cabinetsIndex.js"></script>
-<script src="~/Scripts/siteScripts/ejs_production.js"></script>
+
 }

@@ -27,13 +27,14 @@ namespace EkbDataAccess
         }
         public IEnumerable<Cabinet> GetCabinetInfoByLineId(int lineId)
         {
+          
             using (var dc = new DataClassesDataContext(_connectionString))
             {
-                //var loadOptions = new DataLoadOptions();
-                //loadOptions.LoadWith<Cabinet>(c => c.Line);
-                //dc.LoadOptions = loadOptions;
-                return dc.Cabinets.Where(c => c.LineId == lineId).ToList();
+                
+                IEnumerable<Cabinet> cabinets = dc.Cabinets.Where(c => c.LineId == lineId).ToList();
+                return cabinets;
             }
+         
         }
         public IEnumerable<Cabinet> GetAllCabinets()
         {
@@ -77,11 +78,11 @@ namespace EkbDataAccess
         }
         public void DeleteCabinet(int cabinetId)
         {
-            using(var dc = new DataClassesDataContext(_connectionString))
+            using (var dc = new DataClassesDataContext(_connectionString))
             {
                 dc.ExecuteCommand("DELETE FROM Cabinet WHERE Id = {0}", cabinetId);
             }
-           
+
         }
         public IEnumerable<Brand> GetAllBrandInfo()
         {
@@ -103,16 +104,16 @@ namespace EkbDataAccess
         public IEnumerable<Cabinet> GetCabinetInfoByBrand(int brandId)
         {
             using (var dc = new DataClassesDataContext(_connectionString))
-            {                               
-                  var result = (from c in dc.Cabinets
-                                  join l in dc.Lines on c.LineId equals l.Id
-                                  join b in dc.Brands on l.BrandId equals b.Id
-                                  where b.Id == brandId 
-                                  select c).ToList();
-                  return result; 
-                }
+            {
+                var result = (from c in dc.Cabinets
+                              join l in dc.Lines on c.LineId equals l.Id
+                              join b in dc.Brands on l.BrandId equals b.Id
+                              where b.Id == brandId
+                              select c).ToList();
+                return result;
+            }
         }
-        public IEnumerable<Portfolio>GetAllPortfolioInfo()
+        public IEnumerable<Portfolio> GetAllPortfolioInfo()
         {
             using (var dc = new DataClassesDataContext(_connectionString))
             {

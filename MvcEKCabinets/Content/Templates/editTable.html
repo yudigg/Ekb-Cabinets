@@ -1,0 +1,18 @@
+﻿<div class="modal-body">
+    <form method="POST" action="/admin/AddNewCabinet" enctype="multipart/form-data" class="form-group" id="styleForm">
+        <div class="form-group">
+            <label for="style">Cabinet Name:</label>
+            <input type="text" class="form-control" name="styleName"id="edit-name" value="<%= Name%>">
+        </div>
+    
+        <div class="form-group">
+            <label for="doorImg">Upload Door Image:</label>
+            <input type="file" name="doorImg">
+        </div>
+        <div class="form-group">
+            <label for="fullImg">Upload Full Image:</label>
+            <input type="file" name="fullImg">
+        </div>
+        <button type="submit" id="submitStyle" class="btn btn-default">Submit</button>
+    </form>
+</div>

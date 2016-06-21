@@ -2,35 +2,49 @@
 @model MvcEKCabinets.Models.HomeViewModel
 
 <div class="row">
-
+    <div class="col-md-12">
+        @foreach (Line l in Model.Lines)
+        {
+            <span class="heading">
+                <a href="#@l.Name">@l.Name </a>
+            </span>
+        }
+    </div>
     @foreach (Line l in Model.Lines)
     {
-        <div class="col-md-12">
+        <h3>@l.Name</h3>
+    <div class="col-md-12" id="@l.Name">
 
-            <div class="col-md-7">
-                <img src="@l.FullImage" id="fullImage" style="max-width:100%;
-                     max-height:100%;" />
-                @*@foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
-                    {
-
-                        <img class="thumbnail" src="@c.DoorImage" id="smallImage" data-id="@c.Id" style="height:200px;" />
-                        <div class="caption">
-                            <h3>@c.Description</h3>
-                        </div>
-                    }*@
-            </div>
-            <div class="col-md-4">
-                <h1>@l.Name</h1>
-                <p style="word-wrap:break-word">Description...................................................................................</p>
-            </div>
-            <div class="col-md-7" style="margin-top: 20px;">
-                @foreach (Cabinet c in Model.Cabinets.Where(c => c.LineId == l.Id))
+        <div class="col-md-7">
+            <img src="~/Uploads/@l.Cabinets.FirstOrDefault().FullImage" class="mainImage" style="max-width:100%" />
+        </div>
+        <div class="col-md-4">
+            <h1>@l.Name</h1>
+            <p style="word-wrap:break-word">@l.Description Description...................................................................................</p>
+        </div>
+        <div class="col-md-5" style="margin-top: 20px;">
+            <div id="images">
+                @foreach (Cabinet c in l.Cabinets)
                 {
-
-                    <img src="@c.DoorImage" id="smallImage" data-id="@c.Id" style="height:200px; margin-left:20px; cursor: pointer;" />
+                    <a>
+                        <img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px;" />
+                        <div class="caption">@c.Name</div>
+                    </a>
+                    @*<img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px; margin-left:20px; cursor: pointer;" />*@
                 }
             </div>
-
         </div>
+    </div>
     }
 </div>
+@section scripts
+{
+    <script>
+        $(function () {
+            $(".thumb").hover(function () {
+                var fullImg = $(this).data('full');
+                $(this).parent().parent().parent().siblings().children('.mainImage').attr('src', '/Uploads/' + fullImg);
+            });
+        });
+    </script>
+}

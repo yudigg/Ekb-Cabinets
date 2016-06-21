@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Models\AdminPageModel.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\UserActionFilterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -145,6 +146,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Templates\editTable.html" />
     <Content Include="Content\Templates\viewTable.html" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -235,6 +237,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\siteScripts\admin.cabinetsIndex.js" />
     <Content Include="Scripts\siteScripts\admin.js" />
+    <Content Include="Scripts\siteScripts\ejs_0.9_alpha_1_production.js" />
     <Content Include="Scripts\siteScripts\ejs_production.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -253,6 +256,7 @@
     <Content Include="Views\admin\adminIndex.cshtml" />
     <Content Include="Views\admin\cabinetsIndex.cshtml" />
     <Content Include="Views\admin\editCabinets.cshtml" />
+    <Content Include="Views\admin\login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
