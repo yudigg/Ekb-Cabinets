@@ -5,6 +5,13 @@
         $('#addStyleForm').append('<input type="hidden" name="lineId" value="' + lineId + '" />');
         $('#addStyleModal').modal();
     });
+
+    $(".portfolio-btn").on('click', function () {
+        var lineId = $(this).data('id');
+        $('#portfolioForm').append('<input type="hidden" name="lineId" value="' + lineId + '" />');
+        $('#portfolioModal').modal();
+    });
+
     $(".view-btn").on('click', function () {
         var id = $(this).data('id');
         var lineName = $(this).data('linename');

@@ -14,27 +14,23 @@ namespace EkbDataAccess
         {
             _connectionString = connection;
         }
-        public IEnumerable<Line> GetFullRepository()
+        public IEnumerable<Brand> GetBrandsWithLines()
         {
             using (var dc = new DataClassesDataContext(_connectionString))
             {
                 var loadOptions = new DataLoadOptions();
-                loadOptions.LoadWith<Line>(l => l.Brand);
-                loadOptions.LoadWith<Line>(l => l.Cabinets);
+                loadOptions.LoadWith<Brand>(b => b.Lines);                
                 dc.LoadOptions = loadOptions;
-                return dc.Lines.ToList();
+                return dc.Brands.ToList();
             }
         }
         public IEnumerable<Cabinet> GetCabinetInfoByLineId(int lineId)
-        {
-          
+        {          
             using (var dc = new DataClassesDataContext(_connectionString))
-            {
-                
+            {                
                 IEnumerable<Cabinet> cabinets = dc.Cabinets.Where(c => c.LineId == lineId).ToList();
                 return cabinets;
-            }
-         
+            }         
         }
         public IEnumerable<Cabinet> GetAllCabinets()
         {
@@ -82,7 +78,6 @@ namespace EkbDataAccess
             {
                 dc.ExecuteCommand("DELETE FROM Cabinet WHERE Id = {0}", cabinetId);
             }
-
         }
         public IEnumerable<Brand> GetAllBrandInfo()
         {
@@ -101,6 +96,13 @@ namespace EkbDataAccess
                 return dc.Lines.Where(l => l.BrandId == brandId).ToList();
             }
         }
+        //public string GetBrandNameByLineId(int lineId)
+        //{
+        //    using (var dc = new DataClassesDataContext(_connectionString))
+        //    {
+        //        return  dc.Brands.Where(b => b.Lines. == lineId).First().LogoFile;                
+        //    }
+        //}
         public IEnumerable<Cabinet> GetCabinetInfoByBrand(int brandId)
         {
             using (var dc = new DataClassesDataContext(_connectionString))
@@ -113,11 +115,36 @@ namespace EkbDataAccess
                 return result;
             }
         }
+        public void NewPortfolio(Portfolio portfolio)
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {
+                dc.Portfolios.InsertOnSubmit(portfolio);
+                dc.SubmitChanges();
+            }
+        }
         public IEnumerable<Portfolio> GetAllPortfolioInfo()
         {
             using (var dc = new DataClassesDataContext(_connectionString))
             {
+                var loadOptions = new DataLoadOptions();
+                loadOptions.LoadWith<Portfolio>(p => p.Line);
+                dc.LoadOptions = loadOptions;
                 return dc.Portfolios.ToList();
+            }
+        }
+        public Line GetLineInfoByLine(int lineId)
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {              
+                return dc.Lines.Where(l => l.Id == lineId).First();
+            }
+        }
+        public IEnumerable<GetCabinetsAndLogoByLineIDResult> GetCabinetAndLogoByLineId(int? lineId)
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {
+                return dc.GetCabinetsAndLogoByLineID(lineId).ToList();
             }
         }
     }

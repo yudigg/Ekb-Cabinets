@@ -1,6 +1,4 @@
-﻿@{
-    Layout = null;
-}
+﻿@model System.Web.Mvc.HandleErrorInfo
 
 <!DOCTYPE html>
 <html>
@@ -10,8 +8,12 @@
 </head>
 <body>
     <hgroup>
-        <h1>Error.</h1>
+        <h1>Error. </h1>
         <h2>An error occurred while processing your request.</h2>
+        <h3>@Model.Exception.GetType()</h3>
+        <h4>If this happened more than once please send message to ygoldgrab@gmail.com</h4>
+        
     </hgroup>
+    <a href="ygoldgrab@gmail.com">Send Message</a>
 </body>
 </html>

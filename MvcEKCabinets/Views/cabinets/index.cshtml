@@ -1,66 +1,61 @@
 ﻿@using EkbDataAccess
 @model MvcEKCabinets.Models.HomeViewModel
 
-<div class="row">
+<div class="row back">
     <div class="col-lg-12">
         <h1 class="page-header">
             Welcome to EKB Cabinets
         </h1>
     </div>
     @foreach (Brand b in Model.Brands)
-        {
-            <div class="col-md-4" style="height:auto">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <a href="/cabinets/Lines?brandId=@b.Id">
-                            <img src="/Uploads/@b.LogoFile" style="height: 125px" />
-                        </a>
-                        <a href="#" class="btn btn-default">Learn More</a>
-                        <a href="#" class="btn btn-default">Learn More</a>
-                    </div>
+    {
+        <div class="col-md-3" style="height:auto">
+            <div>
+                <div>
+                    @*<a href="/cabinets/Lines?brandId=@b.Id&logoFile=@b.LogoFile">
+                        <img src="/Uploads/@b.LogoFile" />
+                    </a>*@
+                    <ul class="list-unstyled">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="/cabinets/Lines?brandId=@b.Id&logoFile=@b.LogoFile&name=@b.Name">
+                                <img src="/Uploads/@b.LogoFile" />
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (Line l in b.Lines)
+                                {
+                                    <li><a href="/Cabinets/Lines?lineId=@l.Id">@l.Name</a></li>
+                                }
+
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-            </div>   
+            </div>
+        </div>
     }
 
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            Welcome to Modern Business
-        </h1>
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-default">
-            <img src="http://www.cncassociates.com/wp/wp-content/themes/CNC/images/logo.png">
-            <div class="panel-body">
-                <ul>
-                    <li>Sierra</li>
-                    <li>Elegant</li>
-                    <li>Thermafoil</li>
-                </ul>
-                <a href="#" class="btn btn-default">Learn More</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><i class="fa fa-fw fa-gift"></i> Free &amp; Open Source</h4>
-            </div>
-            <div class="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                <a href="#" class="btn btn-default">Learn More</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><i class="fa fa-fw fa-compass"></i> Easy to Use</h4>
-            </div>
-            <div class="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                <a href="#" class="btn btn-default">Learn More</a>
-            </div>
-        </div>
-    </div>
 </div>
-<!-- /.row -->
+@section scripts{
+    <script>
+        $(function () {
+            $('.dropdown').hover(
+    function () {
+        $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+    },
+    function () {
+        $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+    }
+  );
+
+            $('.dropdown-menu').hover(
+              function () {
+                  $(this).stop(true, true);
+              },
+              function () {
+                  $(this).stop(true, true).delay(200).fadeOut();
+              }
+            );
+
+        });
+    </script>
+}

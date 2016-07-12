@@ -10,8 +10,20 @@ using System.Web.Security;
 
 namespace MvcEKCabinets.Controllers
 {
+  [LogErrors]
     public class AdminController : Controller
     {
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SignUp(string username, string passwd)
+        {
+            AdminsManager mgr = new AdminsManager(Properties.Settings.Default.Constr);
+            mgr.AddAdmin(username, passwd);
+            return RedirectToAction("LogIn");
+        }
         public ActionResult Login()
         {
             if(User.Identity.IsAuthenticated)
@@ -40,9 +52,7 @@ namespace MvcEKCabinets.Controllers
         [Authorize]
         public ActionResult AdminIndex()
         {
-            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            //IEnumerable<Line> all = repo.GetFullRepository();
-            //IEnumerable<Cabinet> cabinets = repo.GetAllCabinets();
+            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);           
             IEnumerable<Brand> brands = repo.GetAllBrandInfo();
             AdminPageModel adm = new AdminPageModel { Brands = brands };
             return View(adm);
@@ -77,18 +87,18 @@ namespace MvcEKCabinets.Controllers
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
             Cabinet c = new Cabinet { Name = styleName, LineId = lineId };
-            if (doorImg.ContentLength > 0)
+            if (doorImg != null)
             {
                 if (IsImage(doorImg))
                 {
-                    c.DoorImage = SavedImg(doorImg);
+                    c.DoorImage = SavedImgName(doorImg);
                 }
             }
-            if (fullImg.ContentLength > 0)
+            if (fullImg != null)
             {
                 if (IsImage(fullImg))
                 {
-                    c.FullImage = SavedImg(fullImg);
+                    c.FullImage = SavedImgName(fullImg);
                 }
             }
             repo.NewCabinet(c);
@@ -107,15 +117,30 @@ namespace MvcEKCabinets.Controllers
         public ActionResult AddNewBrand(string name, HttpPostedFileBase logoImg)
         {
             CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            if (logoImg.ContentLength > 0)
+            if (logoImg != null)
             {
                 if (IsImage(logoImg))
                 {
-                    var fileName = SavedImg(logoImg);
+                    var fileName = SavedImgName(logoImg);
                     Brand b = new Brand { Name = name, LogoFile = fileName };
                     repo.NewBrand(b);
                 }
             }           
+            return RedirectToAction("AdminIndex");
+        }
+        [HttpPost]
+        public ActionResult AddPortfolio(int lineId, HttpPostedFileBase portfolioImg)//prob put in db brand also
+        {
+            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+            if (portfolioImg != null)
+            {
+                if (IsImage(portfolioImg))
+                {
+                    var fileName = SavedImgName(portfolioImg);///probably better to assign guid to db...
+                    Portfolio p = new Portfolio { LineId = lineId, Image = fileName };
+                    repo.NewPortfolio(p);
+                }
+            }
             return RedirectToAction("AdminIndex");
         }
         public ActionResult EditCabinets(int seriesId)
@@ -124,34 +149,26 @@ namespace MvcEKCabinets.Controllers
             IEnumerable<Cabinet> c = repo.GetCabinetInfoByLineId(seriesId);
             return View(c);
         }
+
         [HttpPost]
         public ActionResult EditCabinets(Cabinet c, HttpPostedFileBase doorImg, HttpPostedFileBase fullImg)
         {
-            CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
-            if (doorImg.ContentLength > 0)
-            {
-                if (IsImage(doorImg))
+                CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+                if (doorImg != null)
                 {
-                    c.DoorImage = SavedImg(doorImg);
+                    if (IsImage(doorImg))
+                    {
+                        c.DoorImage = SavedImgName(doorImg);
+                    }
                 }
-            }
-            if (fullImg.ContentLength > 0)
-            {
-                if (IsImage(fullImg))
+                if (fullImg != null)
                 {
-                    c.FullImage = SavedImg(fullImg);
-                }
-            }
-
-              //Cabinet cc = new Cabinet();
-              //  cc.Id = c.Id;
-              //  cc.LineId = c.LineId;
-              //  cc.Name = c.Name;
-              //  cc.DoorImage = c.DoorImage;
-              //  cc.FullImage = c.FullImage;
-                
-            
-            repo.UpdateCabinetInfo(c);
+                    if (IsImage(fullImg))
+                    {
+                        c.FullImage = SavedImgName(fullImg);
+                    }
+                }               
+                repo.UpdateCabinetInfo(c);            
             return RedirectToAction("AdminIndex");
         }
     [HttpPost]
@@ -167,7 +184,6 @@ namespace MvcEKCabinets.Controllers
             {
                 return true;
             }
-
             string[] formats = new string[] { ".jpg", ".png", ".gif", ".jpeg" };
 
             foreach (var item in formats)
@@ -179,7 +195,7 @@ namespace MvcEKCabinets.Controllers
             }
             return false;
         }
-        private string SavedImg(HttpPostedFileBase img)
+        private string SavedImgName(HttpPostedFileBase img)
         {
             var fileName = Path.GetFileName(img.FileName);
             img.SaveAs(Server.MapPath("~/Uploads/" + fileName));

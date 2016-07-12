@@ -30,6 +30,9 @@ namespace EkbDataAccess
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertAdmin(Admin instance);
+    partial void UpdateAdmin(Admin instance);
+    partial void DeleteAdmin(Admin instance);
     partial void InsertBrand(Brand instance);
     partial void UpdateBrand(Brand instance);
     partial void DeleteBrand(Brand instance);
@@ -42,9 +45,6 @@ namespace EkbDataAccess
     partial void InsertPortfolio(Portfolio instance);
     partial void UpdatePortfolio(Portfolio instance);
     partial void DeletePortfolio(Portfolio instance);
-    partial void InsertAdmin(Admin instance);
-    partial void UpdateAdmin(Admin instance);
-    partial void DeleteAdmin(Admin instance);
     #endregion
 		
 		public DataClassesDataContext() : 
@@ -75,6 +75,14 @@ namespace EkbDataAccess
 				base(connection, mappingSource)
 		{
 			OnCreated();
+		}
+		
+		public System.Data.Linq.Table<Admin> Admins
+		{
+			get
+			{
+				return this.GetTable<Admin>();
+			}
 		}
 		
 		public System.Data.Linq.Table<Brand> Brands
@@ -109,11 +117,144 @@ namespace EkbDataAccess
 			}
 		}
 		
-		public System.Data.Linq.Table<Admin> Admins
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetCabinetsAndLogoByLineID")]
+		public ISingleResult<GetCabinetsAndLogoByLineIDResult> GetCabinetsAndLogoByLineID([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> lineId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), lineId);
+			return ((ISingleResult<GetCabinetsAndLogoByLineIDResult>)(result.ReturnValue));
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Admins")]
+	public partial class Admin : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Username;
+		
+		private string _Salt;
+		
+		private string _PasswordHash;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnUsernameChanging(string value);
+    partial void OnUsernameChanged();
+    partial void OnSaltChanging(string value);
+    partial void OnSaltChanged();
+    partial void OnPasswordHashChanging(string value);
+    partial void OnPasswordHashChanged();
+    #endregion
+		
+		public Admin()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
-				return this.GetTable<Admin>();
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Username", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string Username
+		{
+			get
+			{
+				return this._Username;
+			}
+			set
+			{
+				if ((this._Username != value))
+				{
+					this.OnUsernameChanging(value);
+					this.SendPropertyChanging();
+					this._Username = value;
+					this.SendPropertyChanged("Username");
+					this.OnUsernameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Salt", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Salt
+		{
+			get
+			{
+				return this._Salt;
+			}
+			set
+			{
+				if ((this._Salt != value))
+				{
+					this.OnSaltChanging(value);
+					this.SendPropertyChanging();
+					this._Salt = value;
+					this.SendPropertyChanged("Salt");
+					this.OnSaltChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordHash", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string PasswordHash
+		{
+			get
+			{
+				return this._PasswordHash;
+			}
+			set
+			{
+				if ((this._PasswordHash != value))
+				{
+					this.OnPasswordHashChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordHash = value;
+					this.SendPropertyChanged("PasswordHash");
+					this.OnPasswordHashChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
@@ -272,8 +413,6 @@ namespace EkbDataAccess
 		
 		private string _FullImage;
 		
-		private EntitySet<Portfolio> _Portfolios;
-		
 		private EntityRef<Line> _Line;
 		
     #region Extensibility Method Definitions
@@ -294,7 +433,6 @@ namespace EkbDataAccess
 		
 		public Cabinet()
 		{
-			this._Portfolios = new EntitySet<Portfolio>(new Action<Portfolio>(this.attach_Portfolios), new Action<Portfolio>(this.detach_Portfolios));
 			this._Line = default(EntityRef<Line>);
 			OnCreated();
 		}
@@ -403,19 +541,6 @@ namespace EkbDataAccess
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cabinet_Portfolio", Storage="_Portfolios", ThisKey="Id", OtherKey="CabinetId")]
-		public EntitySet<Portfolio> Portfolios
-		{
-			get
-			{
-				return this._Portfolios;
-			}
-			set
-			{
-				this._Portfolios.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Line_Cabinet", Storage="_Line", ThisKey="LineId", OtherKey="Id", IsForeignKey=true)]
 		public Line Line
 		{
@@ -469,18 +594,6 @@ namespace EkbDataAccess
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
-		
-		private void attach_Portfolios(Portfolio entity)
-		{
-			this.SendPropertyChanging();
-			entity.Cabinet = this;
-		}
-		
-		private void detach_Portfolios(Portfolio entity)
-		{
-			this.SendPropertyChanging();
-			entity.Cabinet = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Line")]
@@ -500,6 +613,8 @@ namespace EkbDataAccess
 		private string _Description;
 		
 		private EntitySet<Cabinet> _Cabinets;
+		
+		private EntitySet<Portfolio> _Portfolios;
 		
 		private EntityRef<Brand> _Brand;
 		
@@ -522,6 +637,7 @@ namespace EkbDataAccess
 		public Line()
 		{
 			this._Cabinets = new EntitySet<Cabinet>(new Action<Cabinet>(this.attach_Cabinets), new Action<Cabinet>(this.detach_Cabinets));
+			this._Portfolios = new EntitySet<Portfolio>(new Action<Portfolio>(this.attach_Portfolios), new Action<Portfolio>(this.detach_Portfolios));
 			this._Brand = default(EntityRef<Brand>);
 			OnCreated();
 		}
@@ -643,6 +759,19 @@ namespace EkbDataAccess
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Line_Portfolio", Storage="_Portfolios", ThisKey="Id", OtherKey="LineId")]
+		public EntitySet<Portfolio> Portfolios
+		{
+			get
+			{
+				return this._Portfolios;
+			}
+			set
+			{
+				this._Portfolios.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Brand_Line", Storage="_Brand", ThisKey="BrandId", OtherKey="Id", IsForeignKey=true)]
 		public Brand Brand
 		{
@@ -708,6 +837,18 @@ namespace EkbDataAccess
 			this.SendPropertyChanging();
 			entity.Line = null;
 		}
+		
+		private void attach_Portfolios(Portfolio entity)
+		{
+			this.SendPropertyChanging();
+			entity.Line = this;
+		}
+		
+		private void detach_Portfolios(Portfolio entity)
+		{
+			this.SendPropertyChanging();
+			entity.Line = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Portfolio")]
@@ -718,11 +859,11 @@ namespace EkbDataAccess
 		
 		private int _Id;
 		
-		private int _CabinetId;
+		private int _LineId;
 		
 		private string _Image;
 		
-		private EntityRef<Cabinet> _Cabinet;
+		private EntityRef<Line> _Line;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -730,19 +871,19 @@ namespace EkbDataAccess
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnCabinetIdChanging(int value);
-    partial void OnCabinetIdChanged();
+    partial void OnLineIdChanging(int value);
+    partial void OnLineIdChanged();
     partial void OnImageChanging(string value);
     partial void OnImageChanged();
     #endregion
 		
 		public Portfolio()
 		{
-			this._Cabinet = default(EntityRef<Cabinet>);
+			this._Line = default(EntityRef<Line>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int Id
 		{
 			get
@@ -762,26 +903,26 @@ namespace EkbDataAccess
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CabinetId", DbType="Int NOT NULL")]
-		public int CabinetId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineId", DbType="Int NOT NULL")]
+		public int LineId
 		{
 			get
 			{
-				return this._CabinetId;
+				return this._LineId;
 			}
 			set
 			{
-				if ((this._CabinetId != value))
+				if ((this._LineId != value))
 				{
-					if (this._Cabinet.HasLoadedOrAssignedValue)
+					if (this._Line.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnCabinetIdChanging(value);
+					this.OnLineIdChanging(value);
 					this.SendPropertyChanging();
-					this._CabinetId = value;
-					this.SendPropertyChanged("CabinetId");
-					this.OnCabinetIdChanged();
+					this._LineId = value;
+					this.SendPropertyChanged("LineId");
+					this.OnLineIdChanged();
 				}
 			}
 		}
@@ -806,36 +947,36 @@ namespace EkbDataAccess
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cabinet_Portfolio", Storage="_Cabinet", ThisKey="CabinetId", OtherKey="Id", IsForeignKey=true)]
-		public Cabinet Cabinet
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Line_Portfolio", Storage="_Line", ThisKey="LineId", OtherKey="Id", IsForeignKey=true)]
+		public Line Line
 		{
 			get
 			{
-				return this._Cabinet.Entity;
+				return this._Line.Entity;
 			}
 			set
 			{
-				Cabinet previousValue = this._Cabinet.Entity;
+				Line previousValue = this._Line.Entity;
 				if (((previousValue != value) 
-							|| (this._Cabinet.HasLoadedOrAssignedValue == false)))
+							|| (this._Line.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Cabinet.Entity = null;
+						this._Line.Entity = null;
 						previousValue.Portfolios.Remove(this);
 					}
-					this._Cabinet.Entity = value;
+					this._Line.Entity = value;
 					if ((value != null))
 					{
 						value.Portfolios.Add(this);
-						this._CabinetId = value.Id;
+						this._LineId = value.Id;
 					}
 					else
 					{
-						this._CabinetId = default(int);
+						this._LineId = default(int);
 					}
-					this.SendPropertyChanged("Cabinet");
+					this.SendPropertyChanged("Line");
 				}
 			}
 		}
@@ -861,40 +1002,30 @@ namespace EkbDataAccess
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Admins")]
-	public partial class Admin : INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class GetCabinetsAndLogoByLineIDResult
 	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private string _Username;
+		private int _LineId;
 		
-		private string _Salt;
+		private string _Name;
 		
-		private string _PasswordHash;
+		private string _DoorImage;
 		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnUsernameChanging(string value);
-    partial void OnUsernameChanged();
-    partial void OnSaltChanging(string value);
-    partial void OnSaltChanged();
-    partial void OnPasswordHashChanging(string value);
-    partial void OnPasswordHashChanged();
-    #endregion
+		private string _FullImage;
 		
-		public Admin()
+		private string _LogoFile;
+		
+		private string _LineName;
+		
+		private string _LineDescription;
+		
+		public GetCabinetsAndLogoByLineIDResult()
 		{
-			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL")]
 		public int Id
 		{
 			get
@@ -905,92 +1036,120 @@ namespace EkbDataAccess
 			{
 				if ((this._Id != value))
 				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
 					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Username", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
-		public string Username
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineId", DbType="Int NOT NULL")]
+		public int LineId
 		{
 			get
 			{
-				return this._Username;
+				return this._LineId;
 			}
 			set
 			{
-				if ((this._Username != value))
+				if ((this._LineId != value))
 				{
-					this.OnUsernameChanging(value);
-					this.SendPropertyChanging();
-					this._Username = value;
-					this.SendPropertyChanged("Username");
-					this.OnUsernameChanged();
+					this._LineId = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Salt", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Salt
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
 		{
 			get
 			{
-				return this._Salt;
+				return this._Name;
 			}
 			set
 			{
-				if ((this._Salt != value))
+				if ((this._Name != value))
 				{
-					this.OnSaltChanging(value);
-					this.SendPropertyChanging();
-					this._Salt = value;
-					this.SendPropertyChanged("Salt");
-					this.OnSaltChanged();
+					this._Name = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordHash", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string PasswordHash
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DoorImage", DbType="VarChar(1000)")]
+		public string DoorImage
 		{
 			get
 			{
-				return this._PasswordHash;
+				return this._DoorImage;
 			}
 			set
 			{
-				if ((this._PasswordHash != value))
+				if ((this._DoorImage != value))
 				{
-					this.OnPasswordHashChanging(value);
-					this.SendPropertyChanging();
-					this._PasswordHash = value;
-					this.SendPropertyChanged("PasswordHash");
-					this.OnPasswordHashChanged();
+					this._DoorImage = value;
 				}
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullImage", DbType="VarChar(MAX)")]
+		public string FullImage
 		{
-			if ((this.PropertyChanging != null))
+			get
 			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
+				return this._FullImage;
+			}
+			set
+			{
+				if ((this._FullImage != value))
+				{
+					this._FullImage = value;
+				}
 			}
 		}
 		
-		protected virtual void SendPropertyChanged(String propertyName)
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogoFile", DbType="VarChar(MAX)")]
+		public string LogoFile
 		{
-			if ((this.PropertyChanged != null))
+			get
 			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this._LogoFile;
+			}
+			set
+			{
+				if ((this._LogoFile != value))
+				{
+					this._LogoFile = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string LineName
+		{
+			get
+			{
+				return this._LineName;
+			}
+			set
+			{
+				if ((this._LineName != value))
+				{
+					this._LineName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineDescription", DbType="VarChar(2000)")]
+		public string LineDescription
+		{
+			get
+			{
+				return this._LineDescription;
+			}
+			set
+			{
+				if ((this._LineDescription != value))
+				{
+					this._LineDescription = value;
+				}
 			}
 		}
 	}

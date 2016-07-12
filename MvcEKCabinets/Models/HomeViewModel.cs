@@ -12,5 +12,9 @@ namespace MvcEKCabinets.Models
         public IEnumerable<Line> Lines { get; set; }
         public IEnumerable<Cabinet> Cabinets { get; set; }
         public IEnumerable<Portfolio> Portfolios{ get; set; }
+        public string BrandName { get; set; }
+        public Line Line { get; set; }
+        public IEnumerable<GetCabinetsAndLogoByLineIDResult> CabinetsWithLogo { get; set; }
+        public string LogoFile { get; set; }
     }
 }

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AdminsManager.cs" />
     <Compile Include="CabinetsRepository.cs" />
+    <Compile Include="CabinetsWithLogo.cs" />
     <Compile Include="ConsoleToAddAdmins.cs" />
     <Compile Include="DataClasses.designer.cs">
       <AutoGen>True</AutoGen>

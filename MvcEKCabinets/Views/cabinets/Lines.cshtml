@@ -1,42 +1,94 @@
 ﻿@using EkbDataAccess
 @model MvcEKCabinets.Models.HomeViewModel
 
-<div class="row">
-    <div class="col-md-12">
-        @foreach (Line l in Model.Lines)
+@if (Model.Lines != null)
+{
+    <div class="row"  style="background-color:Menu;padding-top:20px;padding-bottom:30px;">
+        <div class="col-md-5">
+            <h1 style="display:inline;">@Model.BrandName Collection </h1>
+            <img src="~/Uploads/@Model.LogoFile" style="width:75px;height:53px;">           
+        </div>
+        <div class="col-md-7">
+            @foreach (Line l in Model.Lines.Where(a => a.Cabinets.Count > 0))
+            {
+                <h2 style="display:inline;">
+
+                    <a href="#@l.Name">
+                        @l.Name
+                        @if (Model.Lines.Last() != l)
+                        { <span> / </span> }
+                    </a>
+
+                </h2>
+
+            }
+        </div>
+
+            </div>
+    <div class="row">
+        @foreach (Line l in Model.Lines.Where(a => a.Cabinets.Count > 0))
         {
-            <span class="heading">
-                <a href="#@l.Name">@l.Name </a>
-            </span>
+            
+                <div id="@l.Name" class="col-md-12" style="padding-top:40px;">
+
+                    <div class="col-md-7">
+                        <h3>@l.Name</h3>
+                        <img src="~/Uploads/@l.Cabinets.FirstOrDefault().FullImage" class="mainImage" style="max-width:100%" />
+                    </div>
+                    <div class="col-md-4">
+                        <h1>@l.Name</h1>
+                        <p style="word-wrap:break-word">@l.Description Description...................................................................................</p>
+                    </div>
+                    <div class="col-md-5" style="margin-top: 20px;">
+                        <div id="images">
+                            @foreach (Cabinet c in l.Cabinets)
+                            {
+                                <a>
+                                    <img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px;cursor: pointer;" />
+                                    <div class="caption">@c.Name</div>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            
+
         }
     </div>
-    @foreach (Line l in Model.Lines)
-    {
-        <h3>@l.Name</h3>
-    <div class="col-md-12" id="@l.Name">
 
-        <div class="col-md-7">
-            <img src="~/Uploads/@l.Cabinets.FirstOrDefault().FullImage" class="mainImage" style="max-width:100%" />
-        </div>
-        <div class="col-md-4">
-            <h1>@l.Name</h1>
-            <p style="word-wrap:break-word">@l.Description Description...................................................................................</p>
-        </div>
-        <div class="col-md-5" style="margin-top: 20px;">
-            <div id="images">
-                @foreach (Cabinet c in l.Cabinets)
-                {
-                    <a>
-                        <img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px;" />
-                        <div class="caption">@c.Name</div>
-                    </a>
-                    @*<img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px; margin-left:20px; cursor: pointer;" />*@
-                }
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+                      
+
+            <div class="col-md-7">
+                <img src="~/Uploads/@Model.CabinetsWithLogo.First().FullImage" class="mainImage" style="max-width:100%" />
+            </div>
+            <div class="col-md-4">
+                <img src="~/Uploads/@Model.CabinetsWithLogo.First().LogoFile">
+                <h1 class="heading">
+                    <a href="#"> / @Model.CabinetsWithLogo.First().LineName </a>
+                </h1>
+                <p style="word-wrap:break-word">@Model.CabinetsWithLogo.First().LineDescription Description....added to class...............................................................................</p>
+            </div>
+            <div class="col-md-5" style="margin-top: 20px;">
+                <div id="images">
+                    @foreach (GetCabinetsAndLogoByLineIDResult c in Model.CabinetsWithLogo)
+                    {
+                        <a>
+                            <img src="~/Uploads/@c.DoorImage" class="thumb" data-full="@c.FullImage" style="height:200px;cursor: pointer;" />
+                            <div class="caption">@c.Name</div>
+                        </a>                      
+                    }
+                </div>
             </div>
         </div>
     </div>
-    }
-</div>
+}
+
 @section scripts
 {
     <script>

@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EKCabinetsDb" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=EKCabinetsDb;Integrated Security=True" SettingsObjectName="EkbDataAccess.Properties.Settings" SettingsPropertyName="EKCabinetsDbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Admins" Member="Admins">
+    <Type Name="Admin">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Salt" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordHash" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.Brand" Member="Brands">
     <Type Name="Brand">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -15,7 +23,6 @@
       <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="DoorImage" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
       <Column Name="FullImage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Association Name="Cabinet_Portfolio" Member="Portfolios" ThisKey="Id" OtherKey="CabinetId" Type="Portfolio" />
       <Association Name="Line_Cabinet" Member="Line" ThisKey="LineId" OtherKey="Id" Type="Line" IsForeignKey="true" />
     </Type>
   </Table>
@@ -27,23 +34,29 @@
       <Column Name="BrandId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
       <Association Name="Line_Cabinet" Member="Cabinets" ThisKey="Id" OtherKey="LineId" Type="Cabinet" />
+      <Association Name="Line_Portfolio" Member="Portfolios" ThisKey="Id" OtherKey="LineId" Type="Portfolio" />
       <Association Name="Brand_Line" Member="Brand" ThisKey="BrandId" OtherKey="Id" Type="Brand" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Portfolio" Member="Portfolios">
     <Type Name="Portfolio">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="CabinetId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Image" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Cabinet_Portfolio" Member="Cabinet" ThisKey="CabinetId" OtherKey="Id" Type="Cabinet" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Admins" Member="Admins">
-    <Type Name="Admin">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Username" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Salt" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="PasswordHash" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="LineId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Image" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Line_Portfolio" Member="Line" ThisKey="LineId" OtherKey="Id" Type="Line" IsForeignKey="true" />
     </Type>
   </Table>
+  <Function Name="dbo.GetCabinetsAndLogoByLineID" Method="GetCabinetsAndLogoByLineID">
+    <Parameter Name="lineId" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GetCabinetsAndLogoByLineIDResult">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LineId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DoorImage" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="FullImage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="LogoFile" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="LineName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LineDescription" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>
