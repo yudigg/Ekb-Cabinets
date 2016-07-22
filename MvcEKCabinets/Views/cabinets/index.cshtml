@@ -9,16 +9,13 @@
     </div>
     @foreach (Brand b in Model.Brands)
     {
-        <div class="col-md-3" style="height:auto">
+        <div class="col-md-3">
             <div>
-                <div>
-                    @*<a href="/cabinets/Lines?brandId=@b.Id&logoFile=@b.LogoFile">
-                        <img src="/Uploads/@b.LogoFile" />
-                    </a>*@
+                <div>                   
                     <ul class="list-unstyled">
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="/cabinets/Lines?brandId=@b.Id&logoFile=@b.LogoFile&name=@b.Name">
-                                <img src="/Uploads/@b.LogoFile" />
+                                <img src="/Uploads/@b.LogoFile" style="height:130px;" />
                             </a>
                             <ul class="dropdown-menu">
                                 @foreach (Line l in b.Lines)

@@ -15,11 +15,11 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li><a href="/cabinets/styledIndex">Styled Home</a></li>
+                <li><a href="/cabinets/portfolio">Portfolio</a></li>                
+                <li><a href="/cabinets/styledIndex">More Style</a></li>
                 <li><a href="#">Bath</a></li>
-                <li><a href="#">Counter</a></li>
-                <li><a href="/cabinets/portfolio">Portfolio</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">Counter</a></li>              
+                <li><a href="#">Contact</a></li>                
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (ViewBag.Name != null)
@@ -29,7 +29,10 @@
                     </li>
                     @*<li><a href="/admin/logout"><span class="glyphicon glyphicon-user"></span>  Welcome @ViewBag.Name, Sign Out</a></li>*@
                 }
-                
+                else
+                {
+                    <li><a href="/admin/signUp"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                } 
                 
                     <li><a href="/admin/login"><span class="glyphicon glyphicon-log-in"></span> Admin</a></li>
                 

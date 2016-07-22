@@ -72,6 +72,16 @@ namespace EkbDataAccess
                 dc.SubmitChanges();
             }
         }
+        public void UpdateLineInfo(Line line)
+        {
+            using (var dc = new DataClassesDataContext(_connectionString))
+            {
+                dc.Lines.Attach(line);
+                dc.Refresh(RefreshMode.KeepCurrentValues, line);
+                dc.SubmitChanges();
+            }
+        }
+
         public void DeleteCabinet(int cabinetId)
         {
             using (var dc = new DataClassesDataContext(_connectionString))

@@ -22,7 +22,9 @@ namespace MvcEKCabinets.Controllers
         {
             AdminsManager mgr = new AdminsManager(Properties.Settings.Default.Constr);
             mgr.AddAdmin(username, passwd);
-            return RedirectToAction("LogIn");
+            FormsAuthentication.SetAuthCookie(username, true);
+            //return RedirectToAction("LogIn");
+            return RedirectToAction("AdminIndex");
         }
         public ActionResult Login()
         {
@@ -113,6 +115,15 @@ namespace MvcEKCabinets.Controllers
 
             return RedirectToAction("AdminIndex");
         }
+        //[HttpPost]
+        //public ActionResult EditSeries(string name, int brandId, string description)
+        //{
+        //    CabinetsRepository repo = new CabinetsRepository(Properties.Settings.Default.Constr);
+        //    Line l = new Line { Name = name, BrandId = brandId, Description = description };
+        //    repo.NewLine(l);
+
+        //    return RedirectToAction("AdminIndex");
+        //}
         [HttpPost]
         public ActionResult AddNewBrand(string name, HttpPostedFileBase logoImg)
         {

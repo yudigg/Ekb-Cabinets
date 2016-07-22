@@ -5,9 +5,10 @@
 
 
 <table class="table table-bordered table-striped table-hover" id="seriesTable">
-    <caption id="brandCaption">@Model.BrandName</caption>
+    <caption id="brandCaption">
+    <h3>@Model.BrandName</h3></caption>
     <tr>
-        <th>Series</th>
+        <th>Line Name</th>
         <th>Description</th>
         <th>Actions</th>
     </tr>
@@ -25,6 +26,7 @@
                 <button class="view-btn btn btn-success" data-id="@l.Id" data-linename="@l.Name">
                     View Cabinets
                 </button>
+                <br />
                 <br />
                 <button class="portfolio-btn btn btn-success" data-id="@l.Id" data-linename="@l.Name">
                     Add Portfolio

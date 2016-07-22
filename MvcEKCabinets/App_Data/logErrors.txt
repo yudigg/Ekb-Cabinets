@@ -1,1 +1,3 @@
 7/12/2016 12:11:07 PM c:\Users\yudi\AppData\Local\Temp\Temporary ASP.NET Files\root\2c391858\764e66af\App_Web_adminindex.cshtml.925dc4ed.iaca5yvh.0.cs(36): error CS1001: Identifier expected 
+7/15/2016 10:10:50 AM c:\Users\yudi\AppData\Local\Temp\Temporary ASP.NET Files\root\2c391858\764e66af\App_Web_adminindex.cshtml.925dc4ed.q_gjbecf.0.cs(36): error CS1001: Identifier expected 
+7/15/2016 10:11:22 AM c:\Users\yudi\AppData\Local\Temp\Temporary ASP.NET Files\root\2c391858\764e66af\App_Web_adminindex.cshtml.925dc4ed.pzleys-s.0.cs(36): error CS1001: Identifier expected 
